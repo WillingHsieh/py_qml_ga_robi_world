@@ -213,6 +213,19 @@ class Cells(QObject):
     def speed_down(self):
         self.robi.speed_down()
 
+    @Slot()
+    def move_up(self):
+        self.robi.move_up()
+    @Slot()
+    def move_down(self):
+        self.robi.move_down()
+    @Slot()
+    def move_left(self):
+        self.robi.move_left()
+    @Slot()
+    def move_right(self):
+        self.robi.move_right()
+
 if __name__ == "__main__":
     app = QGuiApplication(sys.argv)
     engine = QQmlApplicationEngine()

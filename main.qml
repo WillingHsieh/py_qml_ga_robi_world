@@ -295,6 +295,42 @@ Window {
                 }
             }
 
+            Row {
+                leftPadding: 32
+                Button {
+                    text: qsTr("上移")
+                    onClicked: {
+                        cells.move_up()
+                    }
+                }
+            }
+
+            Row {
+                Button {
+                    text: qsTr("左移")
+                    onClicked: {
+                        cells.move_left()
+                    }
+                }
+
+                Button {
+                    text: qsTr("右移")
+                    onClicked: {
+                        cells.move_right()
+                    }
+                }
+            }
+
+            Row {
+                leftPadding: 32
+                Button {
+                    text: qsTr("下移")
+                    onClicked: {
+                        cells.move_down()
+                    }
+                }
+            }
+
         }
     }
 
@@ -337,6 +373,7 @@ Window {
             ant_move_animation_x.restart()
         }
 
+        // 動畫：垂直移動
         PropertyAnimation  {
             id: ant_move_animation_y
             target: ant
@@ -346,6 +383,7 @@ Window {
             duration: ant.ti / 2
         }
 
+        // 動畫：水平移動
         PropertyAnimation  {
             id: ant_move_animation_x
             target: ant

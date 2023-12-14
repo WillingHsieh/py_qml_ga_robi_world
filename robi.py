@@ -39,16 +39,15 @@ class Robi:
 
         # 隨機方向
         way = random.randint( 0, 3)
-        self.turn_way( way)
 
         # 移動
-        if self.way == Ways.left:
+        if way == Ways.left:
             self.move_left()
-        elif self.way == Ways.right:
+        elif way == Ways.right:
             self.move_right()
-        elif self.way == Ways.up:
+        elif way == Ways.up:
             self.move_up()
-        elif self.way == Ways.down:
+        elif way == Ways.down:
             self.move_down()
 
     def run(self):
@@ -101,43 +100,53 @@ class Robi:
     def get_way(self):
         return self.way
 
-    def turn_way(self, par_way):
-        self.way = par_way
-        self.cells.robi_way_changed.emit( self.way)
-
     # ==== 位置/移動 ====
 
     def score(self, par_i):
-        if par_i == 0:
-            print( "撞牆")
+        if par_i == Ways.up:
+            print( "撞牆", "up")
+        elif par_i == Ways.right:
+            print( "撞牆", "right")
+        elif par_i == Ways.down:
+            print( "撞牆", "down")
+        elif par_i == Ways.left:
+            print( "撞牆", "left")
 
     def get_idx(self):
         return self.cells.get_idx( self.r, self.c)
 
+    def set_way(self, par_way):
+        self.way = par_way
+        self.cells.robi_way_changed.emit( self.way)
+
     def move_up(self):
+        self.set_way( Ways.up)
         if self.r <= 0:
-            self.score( 0)
+            self.score(Ways.up)
             return
         self.r -= 1
         self.cells.robi_pos_changed.emit(self.get_idx())
 
-    def move_down(self):
-        if self.r >= (self.rows-1):
-            self.score( 0)
-            return
-        self.r += 1
-        self.cells.robi_pos_changed.emit(self.get_idx())
-
     def move_left(self):
+        self.set_way( Ways.left)
         if self.c <= 0:
-            self.score( 0)
+            self.score( Ways.left)
             return
         self.c -= 1
         self.cells.robi_pos_changed.emit(self.get_idx())
 
+    def move_down(self):
+        self.set_way( Ways.down)
+        if self.r >= (self.rows-1):
+            self.score( Ways.down)
+            return
+        self.r += 1
+        self.cells.robi_pos_changed.emit(self.get_idx())
+
     def move_right(self):
+        self.set_way( Ways.right)
         if self.c >= (self.cols-1):
-            self.score( 0)
+            self.score( Ways.right)
             return
         self.c += 1
         self.cells.robi_pos_changed.emit(self.get_idx())
