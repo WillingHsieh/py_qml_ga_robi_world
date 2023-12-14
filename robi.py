@@ -1,4 +1,5 @@
 # This Python file uses the following encoding: utf-8
+import random
 from threading import Timer
 
 # 每次清扫工作罗比可以执行200个动作。
@@ -16,7 +17,7 @@ class Ways:
     down = 2
     left = 3
 
-class Ant:
+class Robi:
     # 計時器
     tm_interval = 0.8
     timer = None
@@ -34,18 +35,12 @@ class Ant:
 
     # ==== 開始/結束 ====
 
-    # 若螞蟻在黑格(color)，左轉90度，將該格改為白格，向前移一步。
-    # 若螞蟻在白格，右轉90度，將該格改為黑格，向前移一步；
     def step(self):
-        # 變色/轉向
-        if self.is_color():
-            self.set_color( False)
-            self.turn_left()
-        else:
-            self.set_color( True)
-            self.turn_right()
 
-        # print( "self.way:", self.way)
+        # 隨機方向
+        way = random.randint( 0, 3)
+        self.turn_way( way)
+
         # 移動
         if self.way == Ways.left:
             self.move_left()
@@ -78,12 +73,12 @@ class Ant:
         self.tm_interval /= 2
         if self.tm_interval < 0.003:
             self.tm_interval = 0.003
-        self.cells.ant_ti_changed.emit( self.get_ti_ms())
+        self.cells.robi_ti_changed.emit( self.get_ti_ms())
         print( "加速：", self.tm_interval)
 
     def speed_down(self):
         self.tm_interval *= 2
-        self.cells.ant_ti_changed.emit( self.get_ti_ms())
+        self.cells.robi_ti_changed.emit( self.get_ti_ms())
         print("減速：", self.tm_interval)
 
     def stop(self):
@@ -106,31 +101,43 @@ class Ant:
     def get_way(self):
         return self.way
 
-    def turn_right(self):
-        self.way = (self.way + 1) % 4
-        self.cells.ant_way_changed.emit( self.way)
-
-    def turn_left(self):
-        self.way = (self.way + 3) % 4
-        self.cells.ant_way_changed.emit( self.way)
+    def turn_way(self, par_way):
+        self.way = par_way
+        self.cells.robi_way_changed.emit( self.way)
 
     # ==== 位置/移動 ====
+
+    def score(self, par_i):
+        if par_i == 0:
+            print( "撞牆")
 
     def get_idx(self):
         return self.cells.get_idx( self.r, self.c)
 
     def move_up(self):
-        self.r = (self.r - 1 + self.rows) % self.rows
-        self.cells.ant_pos_changed.emit(self.get_idx())
+        if self.r <= 0:
+            self.score( 0)
+            return
+        self.r -= 1
+        self.cells.robi_pos_changed.emit(self.get_idx())
 
     def move_down(self):
-        self.r = (self.r + 1) % self.rows
-        self.cells.ant_pos_changed.emit(self.get_idx())
+        if self.r >= (self.rows-1):
+            self.score( 0)
+            return
+        self.r += 1
+        self.cells.robi_pos_changed.emit(self.get_idx())
 
     def move_left(self):
-        self.c = (self.c - 1 + self.cols) % self.cols
-        self.cells.ant_pos_changed.emit(self.get_idx())
+        if self.c <= 0:
+            self.score( 0)
+            return
+        self.c -= 1
+        self.cells.robi_pos_changed.emit(self.get_idx())
 
     def move_right(self):
-        self.c = (self.c + 1) % self.cols
-        self.cells.ant_pos_changed.emit(self.get_idx())
+        if self.c >= (self.cols-1):
+            self.score( 0)
+            return
+        self.c += 1
+        self.cells.robi_pos_changed.emit(self.get_idx())

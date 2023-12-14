@@ -313,7 +313,7 @@ Window {
             3: 270
         }
 
-        property int _ant_way: cells.ant_way
+        property int _ant_way: cells.robi_way
         on_Ant_wayChanged: {
             if( _ant_way == 0) { ant.rotation = 0}
             else if( _ant_way == 1) { ant.rotation = 90}
@@ -321,12 +321,12 @@ Window {
             else if( _ant_way == 3) { ant.rotation = 270}
         }
 
-        property int _ant_pos: cells.ant_pos
+        property int _ant_pos: cells.robi_pos
 
         property int r: Math.floor( _ant_pos / _rows)
         property int c: _ant_pos % _rows
 
-        property int ti: cells.ant_ti
+        property int ti: cells.robi_ti
 
         onRChanged: {
             ant_move_animation_y.to = _len * ant.r

@@ -6,7 +6,7 @@ from PySide6.QtGui import QGuiApplication
 from PySide6.QtQml import QQmlApplicationEngine, qmlRegisterType
 import random
 
-from ant import *
+from robi import *
 from db import *
 
 class Cells(QObject):
@@ -35,8 +35,8 @@ class Cells(QObject):
         self.__maps_name = self.__db.get_name_list()
         self._maps_name_changed.emit( self.__maps_name)
 
-        # 螞蟻
-        self.ant = Ant( self)
+        # 羅比
+        self.robi = Robi(self)
         print( "init...end")
 
     # ==== 座標換算/查表 ====
@@ -171,47 +171,47 @@ class Cells(QObject):
         for idx in range( self.__count):
             self.set_data( idx, False)
 
-    # 螞蟻的計時器
-    def get_ant_ti(self):
-        return self.ant.get_ti_ms()
-    ant_ti_changed = Signal( int)
-    ant_ti = Property( int, get_ant_ti, notify=ant_ti_changed)
+    # 羅比的計時器
+    def get_robi_ti(self):
+        return self.robi.get_ti_ms()
+    robi_ti_changed = Signal( int)
+    robi_ti = Property(int, get_robi_ti, notify=robi_ti_changed)
 
-    # 螞蟻的位置
-    def get_ant_pos(self):
-        return self.ant.get_idx( )
-    ant_pos_changed = Signal( int)
-    ant_pos = Property( int, get_ant_pos, notify=ant_pos_changed)
+    # 羅比的位置
+    def get_robi_pos(self):
+        return self.robi.get_idx()
+    robi_pos_changed = Signal( int)
+    robi_pos = Property(int, get_robi_pos, notify=robi_pos_changed)
 
-    # 螞蟻的方向
-    def get_ant_way(self):
-        return self.ant.get_way( )
-    ant_way_changed = Signal( int)
-    ant_way = Property( int, get_ant_way, notify=ant_way_changed)
+    # 羅比的方向
+    def get_robi_way(self):
+        return self.robi.get_way()
+    robi_way_changed = Signal( int)
+    robi_way = Property(int, get_robi_way, notify=robi_way_changed)
 
     # 跌代
     @Slot()
     def step(self):
-        self.ant.step()
+        self.robi.step()
 
     @Slot()
     def stop(self):
-        self.ant.stop()
+        self.robi.stop()
 
     @Slot()
     def begin(self):
         # print( "begin()...")
-        self.ant.begin()
+        self.robi.begin()
 
     # ==== 速度 ====
 
     @Slot()
     def speed_up(self):
-        self.ant.speed_up()
+        self.robi.speed_up()
 
     @Slot()
     def speed_down(self):
-        self.ant.speed_down()
+        self.robi.speed_down()
 
 if __name__ == "__main__":
     app = QGuiApplication(sys.argv)
