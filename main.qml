@@ -5,7 +5,8 @@ import QtQuick.Dialogs
 
 import Cells 1.0
 
-Window {
+Window
+{
     Cells {
         id: cells
 
@@ -86,6 +87,10 @@ Window {
                     on_Is_liveChanged: {
                         if( _is_live)   color = "green"
                         else            color = "white"
+                    }
+
+                    Label {
+                        text: index
                     }
 
                     MouseArea

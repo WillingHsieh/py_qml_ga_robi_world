@@ -149,8 +149,8 @@ class Robi:
     def move_right(self):
         self.set_way( Ways.right)
         if self.c >= (self.cols-1):
-            self.score( Ways.right)
             self.cells.robi_hit.emit( Ways.right)
+            self.score( Ways.right)
             return
         self.c += 1
         self.cells.robi_pos_changed.emit(self.get_idx())

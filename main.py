@@ -53,23 +53,30 @@ class Cells(QObject):
     def get_around_nbs(self, idx):
         nbs = []
         row, col = self.get_row_col(idx)
-        left  = ( col - 1 + self.__cols ) % self.__cols
-        right = ( col + 1               ) % self.__cols
-        up   = ( row - 1 + self.__rows ) % self.__rows
-        down  = ( row + 1               ) % self.__rows
+
+        left  = col - 1
+        right = col + 1
+        up    = row - 1
+        down  = row + 1
+
         nbs_row_cols = (
             ( up,  col),    # 上
             ( row,  right), # 右
             ( down, col),   # 下
             ( row,  left),  # 左
-            ( up,  left),
-            ( up,  right),
-            ( down, left),
-            ( down, right)
         )
         for ( r, c) in nbs_row_cols:
-            nbs.append( self.get_idx( r, c))
+            if not ( 0 <= r < self.__rows):
+                nbs.append( -1)
+            elif not ( 0 <= c < self.__cols):
+                nbs.append( -1)
+            else:
+                nbs.append( self.get_idx( r, c))
         return nbs
+
+    def get_nbs_type(self):
+        p = self.get_robi_pos()
+        print( p, ":", self.__data_nbs[ p])
 
     # 高度
     def get_rows(self):
@@ -194,6 +201,7 @@ class Cells(QObject):
     # 跌代
     @Slot()
     def step(self):
+        print( "step()...")
         self.robi.step()
 
     @Slot()
@@ -218,15 +226,22 @@ class Cells(QObject):
     @Slot()
     def move_up(self):
         self.robi.move_up()
+        self.get_nbs_type()
+
     @Slot()
     def move_down(self):
         self.robi.move_down()
+        self.get_nbs_type()
+
     @Slot()
     def move_left(self):
         self.robi.move_left()
+        self.get_nbs_type()
+
     @Slot()
     def move_right(self):
         self.robi.move_right()
+        self.get_nbs_type()
 
 if __name__ == "__main__":
     app = QGuiApplication(sys.argv)
