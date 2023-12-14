@@ -8,15 +8,20 @@ import Cells 1.0
 Window {
     Cells {
         id: cells
+
+        // 單一格子改變
         on_Cell_changed: {
             var idx = arguments[0]
             var val = arguments[1]
     //            console.log( idx, val)
             rpCells.itemAt( idx)._is_live = val
         }
+
+        // Robi撞牆
         onRobi_hit: {
             var way = arguments[0]
-            console.log( "on_Robi_hit:", way)
+            console.log( "Robi撞牆:", way)
+
             if( way === 0) {    // up
                 ant_hit_animation_y.y_to = ant.y - _len/3
                 ant_hit_animation_y.restart()
@@ -37,6 +42,7 @@ Window {
         }
     }
 
+    // 關閉時先解除一些跟 Python 的綁定，以免報錯
     onClosing: {
         console.log( "onClosing...")
         cells.stop()
