@@ -14,6 +14,27 @@ Window {
     //            console.log( idx, val)
             rpCells.itemAt( idx)._is_live = val
         }
+        onRobi_hit: {
+            var way = arguments[0]
+            console.log( "on_Robi_hit:", way)
+            if( way === 0) {    // up
+                ant_hit_animation_y.y_to = ant.y - _len/3
+                ant_hit_animation_y.restart()
+            }
+            else if( way === 2) {   // down
+                ant_hit_animation_y.y_to = ant.y + _len/3
+                ant_hit_animation_y.restart()
+            }
+            else if( way === 3) {   // left
+                ant_hit_animation_x.x_to = ant.x - _len/3
+                ant_hit_animation_x.restart()
+            }
+            else if( way === 1) {   // right
+                ant_hit_animation_x.x_to = ant.x + _len/3
+                ant_hit_animation_x.restart()
+            }
+
+        }
     }
 
     onClosing: {
@@ -351,7 +372,9 @@ Window {
 
         property int _ant_way: cells.robi_way
         on_Ant_wayChanged: {
-            if( _ant_way == 0) { ant.rotation = 0}
+            if( _ant_way == 0) {
+                ant.rotation = 0
+            }
             else if( _ant_way == 1) { ant.rotation = 90}
             else if( _ant_way == 2) { ant.rotation = 180}
             else if( _ant_way == 3) { ant.rotation = 270}
@@ -371,6 +394,52 @@ Window {
         onCChanged: {
             ant_move_animation_x.to = _len * ant.c
             ant_move_animation_x.restart()
+        }
+
+        // 動畫：垂直撞牆
+        SequentialAnimation{
+            id: ant_hit_animation_y
+
+            running: false
+            property real y_to: ant.y
+
+            PropertyAnimation  {
+                target: ant
+                property: "y"
+                to: ant_hit_animation_y.y_to
+                easing.type: Easing.InOutQuad
+                duration: ant.ti / 4
+            }
+            PropertyAnimation  {
+                target: ant
+                property: "y"
+                to: ant.y
+                easing.type: Easing.InOutQuad
+                duration: ant.ti / 4
+            }
+        }
+
+        // 動畫：水平撞牆
+        SequentialAnimation{
+            id: ant_hit_animation_x
+
+            running: false
+            property real x_to: ant.x
+
+            PropertyAnimation  {
+                target: ant
+                property: "x"
+                to: ant_hit_animation_x.x_to
+                easing.type: Easing.InOutQuad
+                duration: ant.ti / 4
+            }
+            PropertyAnimation  {
+                target: ant
+                property: "x"
+                to: ant.x
+                easing.type: Easing.InOutQuad
+                duration: ant.ti / 4
+            }
         }
 
         // 動畫：垂直移動

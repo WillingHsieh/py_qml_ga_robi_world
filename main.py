@@ -189,6 +189,8 @@ class Cells(QObject):
     robi_way_changed = Signal( int)
     robi_way = Property(int, get_robi_way, notify=robi_way_changed)
 
+    robi_hit = Signal( int)
+
     # 跌代
     @Slot()
     def step(self):

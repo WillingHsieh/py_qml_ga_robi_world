@@ -123,6 +123,7 @@ class Robi:
         self.set_way( Ways.up)
         if self.r <= 0:
             self.score(Ways.up)
+            self.cells.robi_hit.emit( Ways.up)
             return
         self.r -= 1
         self.cells.robi_pos_changed.emit(self.get_idx())
@@ -131,6 +132,7 @@ class Robi:
         self.set_way( Ways.left)
         if self.c <= 0:
             self.score( Ways.left)
+            self.cells.robi_hit.emit( Ways.left)
             return
         self.c -= 1
         self.cells.robi_pos_changed.emit(self.get_idx())
@@ -138,6 +140,7 @@ class Robi:
     def move_down(self):
         self.set_way( Ways.down)
         if self.r >= (self.rows-1):
+            self.cells.robi_hit.emit( Ways.down)
             self.score( Ways.down)
             return
         self.r += 1
@@ -147,6 +150,7 @@ class Robi:
         self.set_way( Ways.right)
         if self.c >= (self.cols-1):
             self.score( Ways.right)
+            self.cells.robi_hit.emit( Ways.right)
             return
         self.c += 1
         self.cells.robi_pos_changed.emit(self.get_idx())
