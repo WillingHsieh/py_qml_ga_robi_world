@@ -41,6 +41,12 @@ Window
             }
 
         }
+
+        onRobi_arround: {
+            var arround = arguments[0]
+//            console.log( arround)
+            lbl_arround.text = arround
+        }
     }
 
     // 關閉時先解除一些跟 Python 的綁定，以免報錯
@@ -112,6 +118,7 @@ Window
             leftPadding: 10
             topPadding: 10
 
+            // 隨機／清空
             Row {
                 Rectangle {
                     height: 20
@@ -147,7 +154,7 @@ Window
                     }
                 }
 
-            }
+            }// 隨機／清空
 
             // 地圖操作
             Row {
@@ -220,7 +227,7 @@ Window
                         dlg_del.open()
                     }
                 }
-            }
+            }// 地圖操作
 
             // ListView 外框
             Rectangle {
@@ -292,7 +299,7 @@ Window
 
             }   // ListView 外框
 
-            // 按鈕
+            // 按鈕：開始/停止／單步
             Row {
 
                 Button {
@@ -363,7 +370,12 @@ Window
                 }
             }
 
+            Label{
+                id: lbl_arround
+                text: "Robi處境"
+            }
         }
+
     }
 
     // 螞蟻

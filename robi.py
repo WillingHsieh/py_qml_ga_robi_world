@@ -42,13 +42,13 @@ class Robi:
 
         # 移動
         if way == Ways.left:
-            self.move_left()
+            self.cells.move_left()
         elif way == Ways.right:
-            self.move_right()
+            self.cells.move_right()
         elif way == Ways.up:
-            self.move_up()
+            self.cells.move_up()
         elif way == Ways.down:
-            self.move_down()
+            self.cells.move_down()
 
     def run(self):
         # print( "run()...")

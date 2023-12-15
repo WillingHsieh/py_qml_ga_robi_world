@@ -221,6 +221,8 @@ class Cells(QObject):
     def speed_down(self):
         self.robi.speed_down()
 
+    robi_arround = Signal( str)
+
     def get_nbs_type(self):
         nbs_type = ""
 
@@ -238,7 +240,9 @@ class Cells(QObject):
 
         # print( p_nbs)
         print( p, ":", nbs_type)
-        print( nbs_type_str( nbs_type))
+        str_arround = nbs_type_str( nbs_type)
+        self.robi_arround.emit( str_arround)
+        # print( str_arround)
 
     # ==== 移動 ====
 
