@@ -14,7 +14,6 @@ Window
         on_Cell_changed: {
             var idx = arguments[0]
             var val = arguments[1]
-    //            console.log( idx, val)
             rpCells.itemAt( idx)._is_live = val
         }
 
@@ -87,6 +86,7 @@ Window
             Keys.onPressed:event => {
                 var key_in = event.key
                 console.log( "key_in:", key_in)
+
                 switch( key_in) {
                 case Qt.Key_Up:
                     btn_up.clicked()
@@ -103,6 +103,33 @@ Window
                case Qt.Key_p:
                case Qt.Key_P:
                    btn_pickup.clicked()
+                   break
+               case Qt.Key_r:
+               case Qt.Key_R:
+                   btn_random_cans.clicked()
+                   break
+               case Qt.Key_c:
+               case Qt.Key_C:
+                   btn_clear.clicked()
+                   break
+               case Qt.Key_l:
+               case Qt.Key_L:
+                   btn_reset_gene.clicked()
+                   break
+
+               case Qt.Key_Plus:
+                   btn_spped_up.clicked()
+                   break
+               case Qt.Key_Minus:
+                   btn_speed_down.clicked()
+                   break
+
+               case Qt.Key_Return:
+                   btn_begin.clicked()
+                   break
+
+               case Qt.Key_Space:
+                   btn_step.clicked()
                    break
                 }
             }
@@ -124,9 +151,9 @@ Window
                         else            color = "white"
                     }
 
-                    Label {
-                        text: index
-                    }
+//                    Label {
+//                        text: index
+//                    }
 
                     MouseArea
                     {
@@ -168,15 +195,17 @@ Window
                 }
 
                 Button {
-                    text: qsTr("隨機")
+                    id: btn_random_cans
+                    text: qsTr("隨機(R)")
                     onClicked: {
-                        console.log( "txt_random_percent:", txt_random_percent.text)
+                        console.log( "隨機移動:", txt_random_percent.text)
                         cells.load_random( txt_random_percent.text)
                     }
                 }
 
                 Button {
-                    text: qsTr("清空")
+                    id: btn_clear
+                    text: qsTr("清空(C)")
                     onClicked: {
                         cells.data_clear()
                     }
@@ -259,6 +288,8 @@ Window
 
             // ListView 外框
             Rectangle {
+                id: rec_list_view
+
                 width: 210
                 height: 10 + 20*8
                 radius: 5
@@ -331,14 +362,19 @@ Window
             Row {
 
                 Button {
-                    text: qsTr("開始/停止")
+                    id: btn_begin
+                    text: qsTr("開始/停止(Enter)")
                     onClicked: {
                         cells.begin()
                     }
                 }
 
+            }
+
+            Row {
                 Button {
-                    text: qsTr("單步")
+                    id: btn_step
+                    text: qsTr("單步(Space)")
                     onClicked: {
                         cells.step()
                     }
@@ -346,16 +382,17 @@ Window
             }
 
             Row {
-
                 Button {
-                    text: qsTr("+加速")
+                    id: btn_spped_up
+                    text: qsTr("加速(+)")
                     onClicked: {
                         cells.speed_up()
                     }
                 }
 
                 Button {
-                    text: qsTr("-減速")
+                    id: btn_speed_down
+                    text: qsTr("減速(-)")
                     onClicked: {
                         cells.speed_down()
                     }
@@ -363,10 +400,10 @@ Window
             }
 
             Row {
-                leftPadding: 32
+                leftPadding: 50
                 Button {
                     id: btn_up
-                    text: qsTr("上移")
+                    text: qsTr("上移(Up)")
                     onClicked: {
                         cells.move_up()
                     }
@@ -376,14 +413,14 @@ Window
             Row {
                 Button {
                     id: btn_left
-                    text: qsTr("左移")
+                    text: qsTr("左移(Left)")
                     onClicked: {
                         cells.move_left()
                     }
                 }
 
                 Button {
-                    text: qsTr("右移")
+                    text: qsTr("右移(Right)")
                     id: btn_right
                     onClicked: {
                         cells.move_right()
@@ -392,10 +429,10 @@ Window
             }
 
             Row {
-                leftPadding: 32
+                leftPadding: 48
                 Button {
                     id: btn_down
-                    text: qsTr("下移")
+                    text: qsTr("下移(Down)")
                     onClicked: {
                         cells.move_down()
                     }
@@ -403,12 +440,18 @@ Window
             }
 
             Row {
-                leftPadding: 32
                 Button {
                     id: btn_pickup
-                    text: qsTr("撿拾")
+                    text: qsTr("撿拾(P)")
                     onClicked: {
                         cells.pickup()
+                    }
+                }
+                Button {
+                    id: btn_reset_gene
+                    text: qsTr("重載基因(L)")
+                    onClicked: {
+                        cells.reset_gene()
                     }
                 }
             }

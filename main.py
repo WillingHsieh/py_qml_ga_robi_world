@@ -270,6 +270,10 @@ class Cells(QObject):
         self.robi.pickup()
         self.get_nbs_type()
 
+    @Slot()
+    def reset_gene(self):
+        self.robi.reset_gene()
+
 if __name__ == "__main__":
     app = QGuiApplication(sys.argv)
     engine = QQmlApplicationEngine()

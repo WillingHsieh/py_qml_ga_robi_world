@@ -37,7 +37,7 @@ class Robi:
 
         self.gene = Gene()
         self.gene.set_gene_random()
-        self.gene.dump_map()
+        self.gene.dump()
 
         self.score = 0
 
@@ -147,8 +147,6 @@ class Robi:
             self.timer.cancel()
             self.timer = None
 
-    # ==== 方向/轉向 ====
-
     def is_color(self):
         idx = self.get_idx()
         return self.cells.is_data_true( idx)
@@ -157,6 +155,8 @@ class Robi:
         idx = self.get_idx()
         self.cells.set_data( idx, val)
         # self.cells.__data[ idx] = val
+
+    # ==== 方向/轉向 ====
 
     def get_way(self):
         return self.way
@@ -180,3 +180,6 @@ class Robi:
     def set_way(self, par_way):
         self.way = par_way
         self.cells.robi_way_changed.emit( self.way)
+
+    def reset_gene(self):
+        self.gene.set_gene_random()

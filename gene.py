@@ -48,29 +48,34 @@ class Gene:
 
     def __init__(self):
         self.gene_str = ""
+        random.seed()
 
     def set_gene_random(self):
+        self.gene_str = ""
         for i in range(243):
             self.gene_str += str( random.randint( 0, 6))
+        print( "set_gene_random:", self.gene_str)
 
     def get_op(self, str_type):
         i = self.op_map[ str_type]
         return self.gene_str[i]
 
-    def dump_map(self):
-        print( len( self.op_map), self.op_map)
+    def dump(self):
+        # print( len( self.op_map), self.op_map)
         print( len( self.gene_str), self.gene_str)
 
 if __name__ == "__main__":
-    gene = Gene()
+    # gene = Gene()
     # gene.init_map()
-    gene.dump_map()
+    # gene.dump_map()
 
     g2 = Gene()
     g2.set_gene_random()
-    g2.dump_map()
-    print( g2.get_op( "00002"))
-    print( g2.get_op( "00012"))
+    # g2.dump()
+    g2.set_gene_random()
+    # g2.dump()
+    # print( g2.get_op( "00002"))
+    # print( g2.get_op( "00012"))
 
     # s = "012345"
     # print( s[1])
