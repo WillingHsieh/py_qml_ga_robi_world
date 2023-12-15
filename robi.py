@@ -39,6 +39,8 @@ class Robi:
         self.gene.set_gene_random()
         self.gene.dump_map()
 
+        self.score = 0
+
         self.op_func = {
             "0": self.move_up,
             "1": self.move_right,
@@ -53,7 +55,7 @@ class Robi:
     def move_up(self):
         self.set_way( Ways.up)
         if self.r <= 0:
-            self.score(Ways.up)
+            self.set_score( "撞牆")
             self.cells.robi_hit.emit( Ways.up)
             return
         self.r -= 1
@@ -62,8 +64,8 @@ class Robi:
     def move_right(self):
         self.set_way( Ways.right)
         if self.c >= (self.cols-1):
+            self.set_score( "撞牆")
             self.cells.robi_hit.emit( Ways.right)
-            self.score( Ways.right)
             return
         self.c += 1
         self.cells.robi_pos_changed.emit(self.get_idx())
@@ -71,8 +73,8 @@ class Robi:
     def move_down(self):
         self.set_way( Ways.down)
         if self.r >= (self.rows-1):
+            self.set_score( "撞牆")
             self.cells.robi_hit.emit( Ways.down)
-            self.score( Ways.down)
             return
         self.r += 1
         self.cells.robi_pos_changed.emit(self.get_idx())
@@ -80,7 +82,7 @@ class Robi:
     def move_left(self):
         self.set_way( Ways.left)
         if self.c <= 0:
-            self.score( Ways.left)
+            self.set_score( "撞牆")
             self.cells.robi_hit.emit( Ways.left)
             return
         self.c -= 1
@@ -95,6 +97,9 @@ class Robi:
         print( "pickup")
         if self.is_color():
             self.set_color( False)
+            self.set_score( "撿拾成功")
+        else:
+            self.set_score( "撿拾失敗")
 
     def nothing(self):
         print("nothing")
@@ -156,17 +161,18 @@ class Robi:
     def get_way(self):
         return self.way
 
-    # ==== 位置/移動 ====
+    # ==== 分數 ====
 
-    def score(self, par_i):
-        if par_i == Ways.up:
-            print( "撞牆", "up")
-        elif par_i == Ways.right:
-            print( "撞牆", "right")
-        elif par_i == Ways.down:
-            print( "撞牆", "down")
-        elif par_i == Ways.left:
-            print( "撞牆", "left")
+    def set_score(self, par_i):
+        if par_i == "撞牆":
+            self.score -= 5
+        elif par_i == "撿拾成功":
+            self.score += 10
+        elif par_i == "撿拾失敗":
+            self.score -= 1
+
+        print( par_i, "-> 分數:", self.score)
+        self.cells.robi_score.emit( self.score)
 
     def get_idx(self):
         return self.cells.get_idx( self.r, self.c)

@@ -21,7 +21,7 @@ Window
         // Robi撞牆
         onRobi_hit: {
             var way = arguments[0]
-            console.log( "Robi撞牆:", way)
+//            console.log( "Robi撞牆:", way)
 
             if( way === 0) {    // up
                 ant_hit_animation_y.y_to = ant.y - _len/3
@@ -45,6 +45,11 @@ Window
             var arround = arguments[0]
 //            console.log( arround)
             lbl_arround.text = arround
+        }
+
+        onRobi_score: {
+            var score = arguments[0]
+            lbl_score.text = "分數: " + score
         }
     }
 
@@ -76,6 +81,31 @@ Window
         // 主要運算格子
         Grid {
             columns: _cols
+            focus: true
+
+            // 響應鍵盤
+            Keys.onPressed:event => {
+                var key_in = event.key
+                console.log( "key_in:", key_in)
+                switch( key_in) {
+                case Qt.Key_Up:
+                    btn_up.clicked()
+                    break
+                case Qt.Key_Right:
+                    btn_right.clicked()
+                    break
+                case Qt.Key_Down:
+                    btn_down.clicked()
+                    break
+                case Qt.Key_Left:
+                    btn_left.clicked()
+                    break
+               case Qt.Key_p:
+               case Qt.Key_P:
+                   btn_pickup.clicked()
+                   break
+                }
+            }
 
             Repeater
             {
@@ -110,7 +140,6 @@ Window
             }
 
         }
-
 
         // 按鈕操作區
         Column {
@@ -336,6 +365,7 @@ Window
             Row {
                 leftPadding: 32
                 Button {
+                    id: btn_up
                     text: qsTr("上移")
                     onClicked: {
                         cells.move_up()
@@ -345,6 +375,7 @@ Window
 
             Row {
                 Button {
+                    id: btn_left
                     text: qsTr("左移")
                     onClicked: {
                         cells.move_left()
@@ -353,6 +384,7 @@ Window
 
                 Button {
                     text: qsTr("右移")
+                    id: btn_right
                     onClicked: {
                         cells.move_right()
                     }
@@ -362,6 +394,7 @@ Window
             Row {
                 leftPadding: 32
                 Button {
+                    id: btn_down
                     text: qsTr("下移")
                     onClicked: {
                         cells.move_down()
@@ -369,9 +402,25 @@ Window
                 }
             }
 
+            Row {
+                leftPadding: 32
+                Button {
+                    id: btn_pickup
+                    text: qsTr("撿拾")
+                    onClicked: {
+                        cells.pickup()
+                    }
+                }
+            }
+
+            Label {
+                id: lbl_score
+                text: "分數:"
+            }
+
             Label{
                 id: lbl_arround
-                text: "Robi處境"
+                text: "Robi狀態"
             }
         }
 

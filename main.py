@@ -194,6 +194,7 @@ class Cells(QObject):
     robi_way = Property(int, get_robi_way, notify=robi_way_changed)
 
     robi_hit = Signal( int)
+    robi_score = Signal( int)
 
     # 跌代
     @Slot()
@@ -262,6 +263,11 @@ class Cells(QObject):
     @Slot()
     def move_right(self):
         self.robi.move_right()
+        self.get_nbs_type()
+
+    @Slot()
+    def pickup(self):
+        self.robi.pickup()
         self.get_nbs_type()
 
 if __name__ == "__main__":
