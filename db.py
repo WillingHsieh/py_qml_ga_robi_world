@@ -1,5 +1,6 @@
 import sqlite3
 import os
+from gene import *
 
 class DB:
     file_name = "db.db"

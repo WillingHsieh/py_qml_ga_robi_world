@@ -1,5 +1,18 @@
 import random
 
+type_s = {
+    "0": "空",
+    "1": "易",
+    "2": "牆",
+}
+
+def nbs_type_str( s):
+    str_rt = ""
+    str_rt += "　" + type_s[s[0]]
+    str_rt += "\n" + ( type_s[s[3]] + type_s[s[4]] + type_s[s[1]])
+    str_rt += "\n" + "　" + type_s[s[2]]
+    return str_rt
+
 class Grid_type:
     empty = "0"
     cans = "1"

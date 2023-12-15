@@ -65,7 +65,9 @@ class Cells(QObject):
             ( down, col),   # 下
             ( row,  left),  # 左
         )
+
         for ( r, c) in nbs_row_cols:
+            # 牆壁表示為 -1
             if not ( 0 <= r < self.__rows):
                 nbs.append( -1)
             elif not ( 0 <= c < self.__cols):
@@ -73,10 +75,6 @@ class Cells(QObject):
             else:
                 nbs.append( self.get_idx( r, c))
         return nbs
-
-    def get_nbs_type(self):
-        p = self.get_robi_pos()
-        print( p, ":", self.__data_nbs[ p])
 
     # 高度
     def get_rows(self):
@@ -222,6 +220,27 @@ class Cells(QObject):
     @Slot()
     def speed_down(self):
         self.robi.speed_down()
+
+    def get_nbs_type(self):
+        nbs_type = ""
+
+        p = self.robi.get_idx()
+        p_nbs = self.__data_nbs[ p] + [p]
+
+        for i in p_nbs:
+            if i < 0:
+                nbs_type += Grid_type.wall
+                continue
+            if self.__data[ i]:
+                nbs_type += Grid_type.cans
+            else:
+                nbs_type += Grid_type.empty
+
+        # print( p_nbs)
+        print( p, ":", nbs_type)
+        print( nbs_type_str( nbs_type))
+
+    # ==== 移動 ====
 
     @Slot()
     def move_up(self):
