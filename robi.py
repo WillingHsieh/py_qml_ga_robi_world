@@ -1,6 +1,7 @@
 # This Python file uses the following encoding: utf-8
 import random
 from threading import Timer
+from gene import *
 
 # 每次清扫工作罗比可以执行200个动作。
 # 动作可以是、往东移动、往西以下7种：往北移动、往南移动移动、随机移动、不动、收集罐子。
@@ -18,6 +19,7 @@ class Ways:
     left = 3
 
 class Robi:
+
     # 計時器
     tm_interval = 0.8
     timer = None
@@ -33,22 +35,76 @@ class Robi:
 
         self.way = Ways.up
 
-    # ==== 開始/結束 ====
+        self.gene = Gene()
+        self.gene.set_gene_random()
+        self.gene.dump_map()
+
+        self.op_func = {
+            "0": self.move_up,
+            "1": self.move_right,
+            "2": self.move_down,
+            "3": self.move_left,
+            "4": self.move_random,
+            "5": self.pickup,
+            "6": self.nothing,
+
+        }
+
+    def move_up(self):
+        self.set_way( Ways.up)
+        if self.r <= 0:
+            self.score(Ways.up)
+            self.cells.robi_hit.emit( Ways.up)
+            return
+        self.r -= 1
+        self.cells.robi_pos_changed.emit(self.get_idx())
+
+    def move_right(self):
+        self.set_way( Ways.right)
+        if self.c >= (self.cols-1):
+            self.cells.robi_hit.emit( Ways.right)
+            self.score( Ways.right)
+            return
+        self.c += 1
+        self.cells.robi_pos_changed.emit(self.get_idx())
+
+    def move_down(self):
+        self.set_way( Ways.down)
+        if self.r >= (self.rows-1):
+            self.cells.robi_hit.emit( Ways.down)
+            self.score( Ways.down)
+            return
+        self.r += 1
+        self.cells.robi_pos_changed.emit(self.get_idx())
+
+    def move_left(self):
+        self.set_way( Ways.left)
+        if self.c <= 0:
+            self.score( Ways.left)
+            self.cells.robi_hit.emit( Ways.left)
+            return
+        self.c -= 1
+        self.cells.robi_pos_changed.emit(self.get_idx())
+
+    def move_random(self):
+        random_way = str(random.randint( 0, 3))
+        print( "random_way:", random_way)
+        self.op_func[ random_way]()
+
+    def pickup(self):
+        print( "pickup")
+        if self.is_color():
+            self.set_color( False)
+
+    def nothing(self):
+        print("nothing")
 
     def step(self):
-
-        # 隨機方向
-        way = random.randint( 0, 3)
-
-        # 移動
-        if way == Ways.left:
-            self.cells.move_left()
-        elif way == Ways.right:
-            self.cells.move_right()
-        elif way == Ways.up:
-            self.cells.move_up()
-        elif way == Ways.down:
-            self.cells.move_down()
+        # 決定做什麼
+        nbs_type = self.cells.get_nbs_type()
+        op = self.gene.get_op( nbs_type)
+        print( "way:", nbs_type, op)
+        self.op_func[ op]()
 
     def run(self):
         # print( "run()...")
@@ -118,39 +174,3 @@ class Robi:
     def set_way(self, par_way):
         self.way = par_way
         self.cells.robi_way_changed.emit( self.way)
-
-    def move_up(self):
-        self.set_way( Ways.up)
-        if self.r <= 0:
-            self.score(Ways.up)
-            self.cells.robi_hit.emit( Ways.up)
-            return
-        self.r -= 1
-        self.cells.robi_pos_changed.emit(self.get_idx())
-
-    def move_left(self):
-        self.set_way( Ways.left)
-        if self.c <= 0:
-            self.score( Ways.left)
-            self.cells.robi_hit.emit( Ways.left)
-            return
-        self.c -= 1
-        self.cells.robi_pos_changed.emit(self.get_idx())
-
-    def move_down(self):
-        self.set_way( Ways.down)
-        if self.r >= (self.rows-1):
-            self.cells.robi_hit.emit( Ways.down)
-            self.score( Ways.down)
-            return
-        self.r += 1
-        self.cells.robi_pos_changed.emit(self.get_idx())
-
-    def move_right(self):
-        self.set_way( Ways.right)
-        if self.c >= (self.cols-1):
-            self.cells.robi_hit.emit( Ways.right)
-            self.score( Ways.right)
-            return
-        self.c += 1
-        self.cells.robi_pos_changed.emit(self.get_idx())

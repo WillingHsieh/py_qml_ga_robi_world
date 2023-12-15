@@ -39,7 +39,6 @@ Window
                 ant_hit_animation_x.x_to = ant.x + _len/3
                 ant_hit_animation_x.restart()
             }
-
         }
 
         onRobi_arround: {

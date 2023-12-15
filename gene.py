@@ -25,7 +25,7 @@ class Op:
     left = "3"
     random = "4"
     pick = "5"
-    sleep = "6"
+    nothing = "6"
 
 grid_type = ( Grid_type.empty, Grid_type.cans, Grid_type.wall)
 

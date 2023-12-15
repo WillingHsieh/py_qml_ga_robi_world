@@ -4,7 +4,6 @@ from pathlib import Path
 from PySide6.QtCore import QObject, Slot, Signal, Property
 from PySide6.QtGui import QGuiApplication
 from PySide6.QtQml import QQmlApplicationEngine, qmlRegisterType
-import random
 
 from robi import *
 from db import *
@@ -238,11 +237,10 @@ class Cells(QObject):
             else:
                 nbs_type += Grid_type.empty
 
-        # print( p_nbs)
-        print( p, ":", nbs_type)
         str_arround = nbs_type_str( nbs_type)
         self.robi_arround.emit( str_arround)
-        # print( str_arround)
+
+        return nbs_type
 
     # ==== 移動 ====
 
