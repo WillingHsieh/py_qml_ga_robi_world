@@ -464,6 +464,16 @@ Window
                 }
             }
 
+            Row {
+                Button {
+                    id: btn_step_200
+                    text: qsTr("10步")
+                    onClicked: {
+                        cells.begin_200()
+                    }
+                }
+            }
+
             Label {
                 id: lbl_score
                 text: "分數:"

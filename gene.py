@@ -53,7 +53,7 @@ class Gene:
     def __init__(self):
 
         # 代表基因的字串
-        self.gene_str = ""
+        self.gene_str = "4" * 243
 
         random.seed()
 

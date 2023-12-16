@@ -218,13 +218,24 @@ class Cells(QObject):
         self.robi.step()
 
     @Slot()
-    def stop(self):
-        self.robi.stop()
-
-    @Slot()
     def begin(self):
         # print( "begin()...")
+        self.robi.step_max = 0
         self.robi.begin()
+
+    def reset(self):
+        self.data_clear()
+        self.load_random( 50)
+
+    @Slot()
+    def begin_200(self):
+        self.reset()
+        self.robi.reset()
+        self.robi.begin_200()
+
+    @Slot()
+    def stop(self):
+        self.robi.stop()
 
     # ==== 速度 ====
 

@@ -35,10 +35,13 @@ class Robi:
         self.way = Ways.up
 
         self.gene = Gene()
-        self.gene.set_gene_random()
+        # self.gene.set_gene_random()
         self.gene.dump()
 
         self.score = 0
+
+        self.step_count = 0
+        self.step_max = 0
 
         self.op_func = {
             "0": self.move_up,
@@ -123,8 +126,13 @@ class Robi:
         self.op_func[ op]()
 
     def run(self):
-        # print( "run()...")
         self.step()
+        self.step_count += 1
+        print( "run():", self.step_count)
+
+        if self.step_max != 0:
+            if self.step_count >= self.step_max:
+                return
 
         self.timer = Timer(self.tm_interval, self.run)
         self.timer.start()
@@ -136,6 +144,10 @@ class Robi:
         else:
             self.timer = Timer(self.tm_interval, self.run)
             self.timer.start()
+
+    def begin_200(self):
+        self.timer = Timer(self.tm_interval, self.run)
+        self.timer.start()
 
     def stop(self):
         print( "stop()...")
@@ -185,7 +197,9 @@ class Robi:
     # ==== 分數／基因 ====
 
     def set_score(self, par_i):
-        if par_i == "撞牆":
+        if par_i == "歸零":
+            self.score = 0
+        elif par_i == "撞牆":
             self.score -= 5
         elif par_i == "撿拾成功":
             self.score += 10
@@ -194,6 +208,15 @@ class Robi:
 
         print( par_i, "-> 分數:", self.score)
         self.cells.robi_score.emit( self.score)
+
+    def reset(self):
+        self.r = 0
+        self.c = 0
+        self.cells.robi_pos_changed.emit(self.get_idx())
+        self.reset_gene()
+        self.set_score( "歸零")
+        self.step_max = 10
+        self.step_count = 0
 
     def reset_gene(self):
         self.gene.set_gene_random()
