@@ -3,3 +3,5 @@
 __pycache__
 *.autosave
 test.py
+.~*
+py_qml_ga_robi_world.odp
