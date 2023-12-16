@@ -83,11 +83,32 @@ Window
             focus: true
 
             // 響應鍵盤
-            Keys.onPressed:event => {
+            Keys.onPressed:
+                event => {
                 var key_in = event.key
-                console.log( "key_in:", key_in)
+//                console.log( "key_in:", key_in)
 
                 switch( key_in) {
+
+                case Qt.Key_r:
+                case Qt.Key_R:
+//                    console.log( "** press r")
+                    btn_random_cans.clicked()
+                    break
+
+                case Qt.Key_c:
+                case Qt.Key_C:
+                    btn_clear.clicked()
+                    break
+
+                case Qt.Key_Return:
+                    btn_begin.clicked()
+                    break
+
+                case Qt.Key_Space:
+                    btn_step.clicked()
+                    break
+
                 case Qt.Key_Up:
                     btn_up.clicked()
                     break
@@ -100,18 +121,12 @@ Window
                 case Qt.Key_Left:
                     btn_left.clicked()
                     break
+
                case Qt.Key_p:
                case Qt.Key_P:
                    btn_pickup.clicked()
                    break
-               case Qt.Key_r:
-               case Qt.Key_R:
-                   btn_random_cans.clicked()
-                   break
-               case Qt.Key_c:
-               case Qt.Key_C:
-                   btn_clear.clicked()
-                   break
+
                case Qt.Key_l:
                case Qt.Key_L:
                    btn_reset_gene.clicked()
@@ -124,13 +139,6 @@ Window
                    btn_speed_down.clicked()
                    break
 
-               case Qt.Key_Return:
-                   btn_begin.clicked()
-                   break
-
-               case Qt.Key_Space:
-                   btn_step.clicked()
-                   break
                 }
             }
 
@@ -198,7 +206,7 @@ Window
                     id: btn_random_cans
                     text: qsTr("隨機(R)")
                     onClicked: {
-                        console.log( "隨機移動:", txt_random_percent.text)
+                        console.log( "隨機布置易拉罐:", txt_random_percent.text)
                         cells.load_random( txt_random_percent.text)
                     }
                 }
@@ -449,7 +457,7 @@ Window
                 }
                 Button {
                     id: btn_reset_gene
-                    text: qsTr("重載基因(L)")
+                    text: qsTr("重設基因(L)")
                     onClicked: {
                         cells.reset_gene()
                     }

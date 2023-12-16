@@ -1,23 +1,5 @@
 import random
 
-type_s = {
-    "0": "□",   # □口
-    "1": "■",
-    "2": "Ｘ",
-}
-
-def nbs_type_str( s):
-    str_rt = ""
-    str_rt += "　" + type_s[s[0]]
-    str_rt += "\n" + ( type_s[s[3]] + type_s[s[4]] + type_s[s[1]])
-    str_rt += "\n" + "　" + type_s[s[2]]
-    return str_rt
-
-class Grid_type:
-    empty = "0"
-    cans = "1"
-    wall = "2"
-
 class Op:
     up = "0"
     right = "1"
@@ -27,16 +9,35 @@ class Op:
     pick = "5"
     nothing = "6"
 
-grid_type = ( Grid_type.empty, Grid_type.cans, Grid_type.wall)
+op_names = {
+    "0": "up",
+    "1": "right",
+    "2": "down",
+    "3": "left",
+    "4": "random",
+    "5": "pick",
+    "6": "nothing",
+}
+
+class Grid_type:
+    empty = "0"
+    cans = "1"
+    wall = "2"
+
+grid_types = (
+    Grid_type.empty,
+    Grid_type.cans,
+    Grid_type.wall
+)
 
 def init_map():
     op_map = {}
     i = 0
-    for c0 in grid_type:
-        for c1 in grid_type:
-            for c2 in grid_type:
-                for c3 in grid_type:
-                    for c4 in grid_type:
+    for c0 in grid_types:
+        for c1 in grid_types:
+            for c2 in grid_types:
+                for c3 in grid_types:
+                    for c4 in grid_types:
                         key = c0 + c1 + c2 + c3 + c4
                         # print(i, key)
                         op_map[key] = i
@@ -44,12 +45,19 @@ def init_map():
     return op_map
 
 class Gene:
+
+    # 基因對照表：Robi 處境對應到基因所在位置
+    # "012345" -> 0...242
     op_map = init_map()
 
     def __init__(self):
+
+        # 代表基因的字串
         self.gene_str = ""
+
         random.seed()
 
+    # 隨機產生基因
     def set_gene_random(self):
         self.gene_str = ""
         for i in range(243):

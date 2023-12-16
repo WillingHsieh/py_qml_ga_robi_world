@@ -8,6 +8,21 @@ from PySide6.QtQml import QQmlApplicationEngine, qmlRegisterType
 from robi import *
 from db import *
 
+# 代表 3 種狀況的全型字符
+type_s = {
+    "0": "□",   # 空
+    "1": "■",   # 易拉罐
+    "2": "Ｘ",   # 牆壁
+}
+
+# 根據 Robi 所處環境，用於顯示的十字字串
+def nbs_type_str( s):
+    str_rt = ""
+    str_rt += "　" + type_s[s[0]] + "\n"
+    str_rt += ( type_s[s[3]] + type_s[s[4]] + type_s[s[1]]) + "\n"
+    str_rt += "　" + type_s[s[2]]
+    return str_rt
+
 class Cells(QObject):
     def __init__(self):
         super().__init__()
@@ -223,21 +238,25 @@ class Cells(QObject):
 
     robi_arround = Signal( str)
 
+    # 取得代表環境的字串
     def get_nbs_type(self):
-        nbs_type = ""
 
+        # 取得鄰居跟自己的位置
         p = self.robi.get_idx()
         p_nbs = self.__data_nbs[ p] + [p]
 
+        nbs_type = ""
         for i in p_nbs:
-            if i < 0:
+            if i < 0:   # 牆壁
                 nbs_type += Grid_type.wall
                 continue
-            if self.__data[ i]:
+
+            if self.__data[ i]:     # 易拉罐
                 nbs_type += Grid_type.cans
-            else:
+            else:                   # 空
                 nbs_type += Grid_type.empty
 
+        # 更新 UI 的顯示
         str_arround = nbs_type_str( nbs_type)
         self.robi_arround.emit( str_arround)
 
@@ -248,27 +267,22 @@ class Cells(QObject):
     @Slot()
     def move_up(self):
         self.robi.move_up()
-        self.get_nbs_type()
 
     @Slot()
     def move_down(self):
         self.robi.move_down()
-        self.get_nbs_type()
 
     @Slot()
     def move_left(self):
         self.robi.move_left()
-        self.get_nbs_type()
 
     @Slot()
     def move_right(self):
         self.robi.move_right()
-        self.get_nbs_type()
 
     @Slot()
     def pickup(self):
         self.robi.pickup()
-        self.get_nbs_type()
 
     @Slot()
     def reset_gene(self):

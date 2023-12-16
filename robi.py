@@ -1,5 +1,4 @@
 # This Python file uses the following encoding: utf-8
-import random
 from threading import Timer
 from gene import *
 
@@ -49,8 +48,9 @@ class Robi:
             "4": self.move_random,
             "5": self.pickup,
             "6": self.nothing,
-
         }
+
+    # ==== 移動／動作 ====
 
     def move_up(self):
         self.set_way( Ways.up)
@@ -60,6 +60,7 @@ class Robi:
             return
         self.r -= 1
         self.cells.robi_pos_changed.emit(self.get_idx())
+        self.cells.get_nbs_type()
 
     def move_right(self):
         self.set_way( Ways.right)
@@ -69,6 +70,7 @@ class Robi:
             return
         self.c += 1
         self.cells.robi_pos_changed.emit(self.get_idx())
+        self.cells.get_nbs_type()
 
     def move_down(self):
         self.set_way( Ways.down)
@@ -78,6 +80,7 @@ class Robi:
             return
         self.r += 1
         self.cells.robi_pos_changed.emit(self.get_idx())
+        self.cells.get_nbs_type()
 
     def move_left(self):
         self.set_way( Ways.left)
@@ -87,9 +90,10 @@ class Robi:
             return
         self.c -= 1
         self.cells.robi_pos_changed.emit(self.get_idx())
+        self.cells.get_nbs_type()
 
     def move_random(self):
-        random_way = str(random.randint( 0, 3))
+        random_way = str( random.randint( 0, 3))
         print( "random_way:", random_way)
         self.op_func[ random_way]()
 
@@ -100,15 +104,22 @@ class Robi:
             self.set_score( "撿拾成功")
         else:
             self.set_score( "撿拾失敗")
+        self.cells.get_nbs_type()
 
-    def nothing(self):
+    @staticmethod
+    def nothing():
         print("nothing")
 
+    # ==== 開始 ====
+
     def step(self):
+
         # 決定做什麼
         nbs_type = self.cells.get_nbs_type()
         op = self.gene.get_op( nbs_type)
-        print( "way:", nbs_type, op)
+        print( "基因決定:", nbs_type, op, op_names[ op])
+
+        # 執行動作
         self.op_func[ op]()
 
     def run(self):
@@ -126,6 +137,14 @@ class Robi:
             self.timer = Timer(self.tm_interval, self.run)
             self.timer.start()
 
+    def stop(self):
+        print( "stop()...")
+        if self.timer is not None:
+            self.timer.cancel()
+            self.timer = None
+
+    # ==== 時間 ====
+
     def get_ti_ms(self):
         return int( self.tm_interval * 1000)
 
@@ -141,11 +160,7 @@ class Robi:
         self.cells.robi_ti_changed.emit( self.get_ti_ms())
         print("減速：", self.tm_interval)
 
-    def stop(self):
-        print( "stop()...")
-        if self.timer is not None:
-            self.timer.cancel()
-            self.timer = None
+    # ==== 顏色 ====
 
     def is_color(self):
         idx = self.get_idx()
@@ -154,14 +169,20 @@ class Robi:
     def set_color(self, val):
         idx = self.get_idx()
         self.cells.set_data( idx, val)
-        # self.cells.__data[ idx] = val
 
-    # ==== 方向/轉向 ====
+    # ==== 方向/定位 ====
+
+    def get_idx(self):
+        return self.cells.get_idx( self.r, self.c)
 
     def get_way(self):
         return self.way
 
-    # ==== 分數 ====
+    def set_way(self, par_way):
+        self.way = par_way
+        self.cells.robi_way_changed.emit( self.way)
+
+    # ==== 分數／基因 ====
 
     def set_score(self, par_i):
         if par_i == "撞牆":
@@ -173,13 +194,6 @@ class Robi:
 
         print( par_i, "-> 分數:", self.score)
         self.cells.robi_score.emit( self.score)
-
-    def get_idx(self):
-        return self.cells.get_idx( self.r, self.c)
-
-    def set_way(self, par_way):
-        self.way = par_way
-        self.cells.robi_way_changed.emit( self.way)
 
     def reset_gene(self):
         self.gene.set_gene_random()
