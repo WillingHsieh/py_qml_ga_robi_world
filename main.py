@@ -51,7 +51,6 @@ class Cells(QObject):
 
         # 羅比
         self.robi = Robi(self)
-        print( "init...end")
 
     # ==== 座標換算/查表 ====
 
@@ -210,6 +209,7 @@ class Cells(QObject):
 
     robi_hit = Signal( int)
     robi_score = Signal( int)
+    robi_step_counter = Signal( int)
 
     # 跌代
     @Slot()

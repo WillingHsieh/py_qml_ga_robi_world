@@ -50,6 +50,12 @@ Window
             var score = arguments[0]
             lbl_score.text = "分數: " + score
         }
+
+        onRobi_step_counter: {
+            var step_counter = arguments[0]
+//            console.log( "step_counter:", step_counter)
+            lbl_step_counter.text = "步數: " + step_counter
+        }
     }
 
     // 關閉時先解除一些跟 Python 的綁定，以免報錯
@@ -474,9 +480,17 @@ Window
                 }
             }
 
-            Label {
-                id: lbl_score
-                text: "分數:"
+            Row {
+                spacing: 50
+                Label {
+                    id: lbl_score
+                    text: "分數: 0"
+                }
+                Label {
+                    id: lbl_step_counter
+//                    x: lbl_score.x + 100
+                    text: "步數: 0"
+                }
             }
 
             Label{

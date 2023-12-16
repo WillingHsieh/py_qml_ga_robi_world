@@ -38,9 +38,12 @@ class Robi:
         # self.gene.set_gene_random()
         self.gene.dump()
 
-        self.score = 0
+        self.score = -1
+        self.set_score( "歸零")
 
-        self.step_count = 0
+        self.step_counter = -1
+        self.set_step_counter( 0)
+
         self.step_max = 0
 
         self.op_func = {
@@ -97,11 +100,10 @@ class Robi:
 
     def move_random(self):
         random_way = str( random.randint( 0, 3))
-        print( "random_way:", random_way)
+        print( "\t隨機方向:", random_way)
         self.op_func[ random_way]()
 
     def pickup(self):
-        print( "pickup")
         if self.is_color():
             self.set_color( False)
             self.set_score( "撿拾成功")
@@ -111,7 +113,7 @@ class Robi:
 
     @staticmethod
     def nothing():
-        print("nothing")
+        pass
 
     # ==== 開始 ====
 
@@ -120,18 +122,20 @@ class Robi:
         # 決定做什麼
         nbs_type = self.cells.get_nbs_type()
         op = self.gene.get_op( nbs_type)
-        print( "基因決定:", nbs_type, op, op_names[ op])
+        print( self.step_counter, "基因決定:",
+               nbs_type, "->", op + "(" + op_names[ op] + ")")
 
         # 執行動作
         self.op_func[ op]()
 
     def run(self):
         self.step()
-        self.step_count += 1
-        print( "run():", self.step_count)
+        self.set_step_counter( self.step_counter + 1)
+        # print( "run():", self.step_counter)
 
+        # 0 代表一直走不停
         if self.step_max != 0:
-            if self.step_count >= self.step_max:
+            if self.step_counter >= self.step_max:
                 return
 
         self.timer = Timer(self.tm_interval, self.run)
@@ -206,8 +210,12 @@ class Robi:
         elif par_i == "撿拾失敗":
             self.score -= 1
 
-        print( par_i, "-> 分數:", self.score)
+        # print( par_i, "-> 分數:", self.score)
         self.cells.robi_score.emit( self.score)
+
+    def set_step_counter(self, par_c):
+        self.step_counter = par_c
+        self.cells.robi_step_counter.emit( self.step_counter)
 
     def reset(self):
         self.r = 0
@@ -216,7 +224,7 @@ class Robi:
         self.reset_gene()
         self.set_score( "歸零")
         self.step_max = 10
-        self.step_count = 0
+        self.set_step_counter( 0)
 
     def reset_gene(self):
         self.gene.set_gene_random()
