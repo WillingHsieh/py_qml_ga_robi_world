@@ -473,7 +473,7 @@ Window
             Row {
                 Button {
                     id: btn_step_200
-                    text: qsTr("10步")
+                    text: qsTr("GA10步")
                     onClicked: {
                         cells.begin_200()
                     }

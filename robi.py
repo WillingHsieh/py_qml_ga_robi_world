@@ -128,15 +128,14 @@ class Robi:
         # 執行動作
         self.op_func[ op]()
 
+        # 步數累計
+        self.set_step_counter( self.step_counter + 1)
+
     def run(self):
         self.step()
-        self.set_step_counter( self.step_counter + 1)
-        # print( "run():", self.step_counter)
 
-        # 0 代表一直走不停
-        if self.step_max != 0:
-            if self.step_counter >= self.step_max:
-                return
+        # 步數累計
+        # self.set_step_counter( self.step_counter + 1)
 
         self.timer = Timer(self.tm_interval, self.run)
         self.timer.start()
@@ -149,8 +148,20 @@ class Robi:
             self.timer = Timer(self.tm_interval, self.run)
             self.timer.start()
 
+    def run_200(self):
+        self.step()
+
+        # 步數累計／判斷是否結束
+        # self.set_step_counter( self.step_counter + 1)
+        if self.step_counter >= self.step_max:
+            self.cells.finished_200()
+            return
+
+        self.timer = Timer(self.tm_interval, self.run_200)
+        self.timer.start()
+
     def begin_200(self):
-        self.timer = Timer(self.tm_interval, self.run)
+        self.timer = Timer(self.tm_interval, self.run_200)
         self.timer.start()
 
     def stop(self):
@@ -221,6 +232,9 @@ class Robi:
         self.r = 0
         self.c = 0
         self.cells.robi_pos_changed.emit(self.get_idx())
+
+        self.set_way( Ways.up)
+
         self.reset_gene()
         self.set_score( "歸零")
         self.step_max = 10

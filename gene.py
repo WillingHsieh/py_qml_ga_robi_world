@@ -62,7 +62,7 @@ class Gene:
         self.gene_str = ""
         for i in range(243):
             self.gene_str += str( random.randint( 0, 6))
-        print( "set_gene_random:", self.gene_str)
+        print( "新的基因:", self.gene_str[:30]+"...")
 
     def get_op(self, str_type):
         i = self.op_map[ str_type]

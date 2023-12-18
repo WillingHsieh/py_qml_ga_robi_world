@@ -31,7 +31,7 @@ class Cells(QObject):
 
         self.__rows = 10
         self.__cols = 10
-        self.__len = 60
+        self.__len = 65
 
         # 格子總數
         self.__count = self.__rows * self.__cols
@@ -174,12 +174,12 @@ class Cells(QObject):
     @Slot( int)
     def load_random(self, percent):
         list_len = int(self.__count * percent / 100)
-        print( "list_len:", list_len)
+        # print( "list_len:", list_len)
 
         list_pos = set()
         while len(list_pos) < list_len:
             list_pos.add( random.randint(0, self.__count-1))
-        print( len(list_pos), list_pos)
+        # print( len(list_pos), list_pos)
 
         for ii in list_pos:
             self.set_data( ii, True)
@@ -229,9 +229,14 @@ class Cells(QObject):
 
     @Slot()
     def begin_200(self):
+        print( "")
         self.reset()
         self.robi.reset()
         self.robi.begin_200()
+
+    def finished_200(self):
+        print( "finished_200()...")
+        self.begin_200()
 
     @Slot()
     def stop(self):
